@@ -4,28 +4,32 @@ const Window = require('electron').BrowserWindow; // jshint ignore:line
 const Tray = require('electron').Tray; // jshint ignore:line
 const Menu = require('electron').Menu; // jshint ignore:line
 const { ipcMain } = require('electron');
+const appName = require('./package.json').name;
 const fs = require('fs');
 
 const server = require('./app');
 const port = 3000;
 const host = server.listen(0, () => console.log(`Express server listening on port ${host.address().port}`));
 
-let mainWindow = null;
+let mainWindow = null; 
+let tray = null;
+let quitNow = false;
 
 app.on('ready', function () {
 	const path = require('path');
 	const iconPath = path.resolve(__dirname, './server.ico');
-	const appIcon = new Tray(iconPath);
 	mainWindow = new Window({
-		width: 1280,
-		height: 1024,
+		width: 800,
+		height: 600,
 		autoHideMenuBar: false,
 		useContentSize: true,
 		resizable: true,
+		show: false,
 		icon: iconPath,
 		//  'node-integration': false // otherwise various client-side things may break
 	});
-	appIcon.setToolTip('My Cool App');
+	// const appIcon = new Tray(iconPath);
+	// appIcon.setToolTip('My Cool App');
 	mainWindow.loadURL(`http://localhost:${host.address().port}`);
 
 	// remove this for production
@@ -79,7 +83,41 @@ app.on('ready', function () {
 	const menu = Menu.buildFromTemplate(template);
 	Menu.setApplicationMenu(menu);
 
+	//Tray icon
+	// const trayicon = path.join(__dirname, '/server.ico') // required.
+	// tray = new Tray(trayicon.resize({ width: 16 }))
+	tray = new Tray(iconPath)
+	const contextMenu = Menu.buildFromTemplate([
+		{
+			label: 'Show App',
+			click: () => {
+				// createWindow()
+				mainWindow.show()
+			}
+		},
+		{
+			label: 'Quit',
+			click: () => {
+				quitNow = true;
+				app.quit() // actually quit the app.
+			}
+		},
+	])
+	tray.setToolTip(appName);
+	tray.setContextMenu(contextMenu);
+	tray.on('right-click',function(){
+		console.log('Single click event.');
+	})
+	tray.on('double-click',function(){
+		mainWindow.show();
+	})
+
 	mainWindow.focus();
+	mainWindow.on('close',function(event){
+		if(!quitNow)
+			event.preventDefault();
+			mainWindow.hide();
+	})
 
 });
 
