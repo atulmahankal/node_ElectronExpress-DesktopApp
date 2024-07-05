@@ -1,16 +1,26 @@
 <!doctype html>
 <html lang='en-US'>
 
-	<head>
-		<meta charset='utf-8' />
-		<title>Title</title>
-	</head>
+  <head>
+    <meta charset='utf-8' />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'"
+    />
+    <title>Electron app</title>
+  </head>
 
-	<body>
-		<h1>Hello World, Welcome to a Electron app.</h1>
-		Server listening on <span id='port'></span>
-		
-		<script src='./renderer.js'></script>
-	</body>
+  <body>
+    <h1>Hello from Electron renderer!</h1>
+    <p>👋</p>
+    <p id="info"></p>
+    Server listening on <span id='port'>[ get port ]</span>
+    <p>
+      <input type="text" id="name" placeholder="Enter your name">
+      <button id="send-name">Send Name</button>
+      <span id="result"></span>
+    </p>
+    <script src='./renderer.js'></script>
+  </body>
 
 </html>

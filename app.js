@@ -8,15 +8,15 @@
     const router = express.Router();
 
     const app = express();
-    const publicPath = path.resolve(__dirname, '../dist');
+    // const publicPath = path.resolve(__dirname, '/public');
 
     // point for static assets
-    app.use(express.static(publicPath));
+    app.use(express.static('public'));
 
     //view engine setup
-    app.set('views', path.join(__dirname, '../dist'));
-    app.engine('html', require('ejs').renderFile);
-    app.set('view engine', 'html');
+    // app.set('views', path.join(__dirname, 'viewsviews'));
+    // app.engine('html', require('ejs').renderFile);
+    // app.set('view engine', 'html');
 
     app.use(logger('dev'));
     app.use(bodyParser.json());

@@ -3,8 +3,11 @@
   "version": "1.0.0",
   "description": "Electron app with express server on random port",
   "main": "main.js",
+  "bin": "main.js",
   "scripts": {
-    "start": "electron ."
+    "start": "electron .",
+    "dev": "electronmon --trace-warnings .",
+    "build": "pkg ."
   },
   "author": "Atul Mahankal",
   "license": "ISC",
@@ -16,5 +19,20 @@
     "electron-root-path": "^1.1.0",
     "express": "^4.18.2",
     "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "electronmon": "^2.0.3"
+  },
+  "pkg": {
+    "outputPath": "dist",
+    "targets": [
+      "win"
+    ]
+  },
+  "electronmon": {
+    "patterns": [
+      "!node_modules/**",
+      "!app/node_modules/**"
+    ]
   }
 }
